@@ -40,21 +40,21 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemDto update(Long userId, Long itemId, ItemDto itemDto) {
         if (userStorage.getUserById(userId) == null
-            ||itemStorage.getItemById(itemId) == null
+                || itemStorage.getItemById(itemId) == null
                 || !itemStorage.getItemById(itemId).getOwner().getId().equals(userId)) {
             throw new UserNotOwnerException("Вы пытаетесь изменить чужую вещь");
         }
         Item item = itemStorage.getItemById(itemId);
-        if (itemDto.getName() != null){
+        if (itemDto.getName() != null) {
             item.setName(itemDto.getName());
         }
-        if (itemDto.getDescription() !=null){
+        if (itemDto.getDescription() != null) {
             item.setDescription(itemDto.getDescription());
         }
-        if (itemDto.getAvailable() !=null){
+        if (itemDto.getAvailable() != null) {
             item.setAvailable(itemDto.getAvailable());
         }
-        if (itemDto.getRequest() !=null){
+        if (itemDto.getRequest() != null) {
             item.setRequest(itemDto.getRequest());
         }
         itemStorage.update(item);

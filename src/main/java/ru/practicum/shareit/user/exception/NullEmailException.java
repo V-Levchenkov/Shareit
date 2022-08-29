@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class NullEmailException extends RuntimeException {
-    public NullEmailException(String message){
+    public NullEmailException(String message) {
         super(message);
     }
 }

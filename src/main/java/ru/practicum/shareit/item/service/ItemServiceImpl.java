@@ -81,7 +81,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDto> search(String text) {
-        if (text.equals("")) {
+        if (("").equals(text)) {
             return new ArrayList<>();
         }
 

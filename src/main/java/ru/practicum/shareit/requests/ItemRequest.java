@@ -1,4 +1,4 @@
-package ru.practicum.shareit.item.storage.requests;
+package ru.practicum.shareit.requests;
 
 /**
  * // TODO in next SPRINT

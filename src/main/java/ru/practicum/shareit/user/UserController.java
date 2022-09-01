@@ -2,9 +2,11 @@ package ru.practicum.shareit.user;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.service.UserService;
+import ru.practicum.shareit.user.service.UserServiceImpl;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -12,11 +14,12 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping(path = "/users")
+@Validated
 public class UserController {
     private final UserService userService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserServiceImpl userService) {
         this.userService = userService;
     }
 
@@ -28,25 +31,25 @@ public class UserController {
 
     @PatchMapping("/{userId}")
     public UserDto update(@PathVariable Long userId, @RequestBody UserDto userDto) {
-        log.info("update user id={}", userId);
+        log.info("update user id ={}", userId);
         return userService.update(userId, userDto);
     }
 
     @DeleteMapping("/{userId}")
     public void delete(@PathVariable Long userId) {
-        log.info("delete user id = {}", userId);
+        log.info("delete user id={}", userId);
         userService.delete(userId);
     }
 
     @GetMapping("/{userId}")
     public UserDto getUserById(@PathVariable Long userId) {
-        log.info("get user id = {}", userId);
+        log.info("get user id={}", userId);
         return userService.getUserById(userId);
     }
 
     @GetMapping
     public List<UserDto> getAllUsers() {
-        log.info("get all Users");
+        log.info("get all users");
         return userService.getAllUsers();
     }
 }

@@ -51,16 +51,14 @@ public class BookingController {
     List<BookingDtoState> getBookingCurrentUser(@NotBlank @RequestHeader("X-Sharer-User-Id") long userId,
                                                 @RequestParam(defaultValue = "ALL") String state) {
         log.info("get booking current user id ={}", userId);
-        State stateEnum = ValidateState.validateStatus(state);
-        return bookingService.getBookingCurrentUser(userId, stateEnum);
+        return bookingService.getBookingCurrentUser(userId, state);
     }
 
     @GetMapping("/owner")
     List<BookingDtoState> getBookingCurrentOwner(@NotBlank @RequestHeader("X-Sharer-User-Id") long userId,
                                                  @RequestParam(defaultValue = "ALL") String state) {
         log.info("get booking current owner id ={}", userId);
-        State stateEnum = ValidateState.validateStatus(state);
-        return bookingService.getBookingCurrentOwner(userId, stateEnum);
+        return bookingService.getBookingCurrentOwner(userId, state);
     }
 
     @ExceptionHandler

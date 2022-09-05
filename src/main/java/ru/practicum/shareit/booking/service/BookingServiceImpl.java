@@ -12,6 +12,7 @@ import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.State;
 import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.booking.repositiory.BookingRepository;
+import ru.practicum.shareit.booking.validation.ValidateState;
 import ru.practicum.shareit.item.exception.ItemNotAvalibleException;
 import ru.practicum.shareit.item.exception.ItemNotFoundException;
 import ru.practicum.shareit.item.exception.UserNotOwnerException;
@@ -86,23 +87,25 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingDtoState> getBookingCurrentUser(long userId, State stateEnum) {
+    public List<BookingDtoState> getBookingCurrentUser(long userId, String stateEnum) {
+        State state = ValidateState.validateStatus(stateEnum);
         User booker = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
         return bookingRepository.findAllByBooker(booker)
                 .stream()
                 .map(BookingMapper::toBookingDtoState)
-                .filter(bookingDtoState -> bookingDtoState.getStates().contains(stateEnum))
+                .filter(bookingDtoState -> bookingDtoState.getStates().contains(state))
                 .sorted(Comparator.comparing(BookingDtoState::getStart).reversed())
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<BookingDtoState> getBookingCurrentOwner(long userId, State stateEnum) {
+    public List<BookingDtoState> getBookingCurrentOwner(long userId, String stateEnum) {
+        State state = ValidateState.validateStatus(stateEnum);
         User owner = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
         return bookingRepository.findAllByItemOwner(owner)
                 .stream()
                 .map(BookingMapper::toBookingDtoState)
-                .filter(bookingDtoState -> bookingDtoState.getStates().contains(stateEnum))
+                .filter(bookingDtoState -> bookingDtoState.getStates().contains(state))
                 .sorted(Comparator.comparing(BookingDtoState::getStart).reversed())
                 .collect(Collectors.toList());
     }

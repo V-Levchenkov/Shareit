@@ -1,10 +1,10 @@
-package ru.practicum.shareit.item.storage.requests;
+package ru.practicum.shareit.requests.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * // TODO in next SPRINT
+ * // TODO .
  */
 @RestController
 @RequestMapping(path = "/requests")

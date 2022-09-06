@@ -1,29 +1,27 @@
 package ru.practicum.shareit.item.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.item.storage.requests.ItemRequest;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+/**
+ * // TODO .
+ */
 @Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class ItemDto {
+
     private Long id;
-
-    @NotEmpty
+    @NotBlank(message = "name should not be blank")
+    @NotNull
     private String name;
-
-    @NotEmpty
+    @NotNull
+    @NotBlank(message = "name should not be blank")
     private String description;
-
     @NotNull
     private Boolean available;
-
-    private ItemRequest request;
 }

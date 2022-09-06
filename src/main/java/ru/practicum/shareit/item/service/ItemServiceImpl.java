@@ -1,98 +1,96 @@
 package ru.practicum.shareit.item.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.item.ItemMapper;
+import ru.practicum.shareit.exception.StorageException;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.exception.UserNotOwnerException;
+import ru.practicum.shareit.item.dto.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.storage.ItemStorage;
-import ru.practicum.shareit.user.exception.UserNotFoundException;
-import ru.practicum.shareit.user.storage.UserStorage;
+import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.user.repository.UserRepository;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class ItemServiceImpl implements ItemService {
-    private final ItemStorage itemStorage;
-    private final UserStorage userStorage;
+
+    private final ItemRepository itemRepository;
+    private final ItemMapper itemMapper;
+    private final UserRepository userRepository;
 
     @Autowired
-    public ItemServiceImpl(ItemStorage itemStorage, UserStorage userStorage) {
-        this.itemStorage = itemStorage;
-        this.userStorage = userStorage;
+    public ItemServiceImpl(ItemRepository itemRepository, ItemMapper itemMapper, UserRepository userRepository) {
+        this.itemRepository = itemRepository;
+        this.itemMapper = itemMapper;
+        this.userRepository = userRepository;
     }
 
     @Override
-    public ItemDto create(Long userId, ItemDto itemDto) {
-        Item item = ItemMapper.toItem(itemDto);
-        if (userStorage.getUserById(userId) == null) {
-            throw new UserNotFoundException("User no found");
+    public ItemDto findById(long itemId) {
+        if (itemRepository.findById(itemId).isPresent()) {
+            return itemMapper.toItemDto(itemRepository.findById(itemId).get());
         }
-        item.setOwner(userStorage.getUserById(userId));
-        itemStorage.create(item);
-        return ItemMapper.toItemDto(item);
+        throw new StorageException("Вещи с Id = " + itemId + " нет в БД");
     }
 
     @Override
-    public ItemDto update(Long userId, Long itemId, ItemDto itemDto) {
-        if (userStorage.getUserById(userId) == null
-                || itemStorage.getItemById(itemId) == null
-                || !itemStorage.getItemById(itemId).getOwner().getId().equals(userId)) {
-            throw new UserNotOwnerException("Вы пытаетесь изменить чужую вещь");
-        }
-        Item item = itemStorage.getItemById(itemId);
-        if (itemDto.getName() != null) {
-            item.setName(itemDto.getName());
-        }
-        if (itemDto.getDescription() != null) {
-            item.setDescription(itemDto.getDescription());
-        }
-        if (itemDto.getAvailable() != null) {
-            item.setAvailable(itemDto.getAvailable());
-        }
-        if (itemDto.getRequest() != null) {
-            item.setRequest(itemDto.getRequest());
-        }
-        itemStorage.update(item);
-        return ItemMapper.toItemDto(item);
-    }
-
-    @Override
-    public ItemDto getItemById(Long itemId) {
-        Item item = itemStorage.getItemById(itemId);
-        return ItemMapper.toItemDto(item);
-    }
-
-    @Override
-    public List<ItemDto> getAllItemsByUser(Long userId) {
-        if (userStorage.getUserById(userId) == null) {
-            throw new UserNotFoundException("Нет такого юзера");
-        }
-        return itemStorage.getAllItems()
-                .stream()
+    public List<ItemDto> findAll(long userId) {
+        return itemRepository.findAll().stream()
                 .filter(item -> item.getOwner().getId().equals(userId))
-                .map(ItemMapper::toItemDto)
+                .map(itemMapper::toItemDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<ItemDto> search(String text) {
-        if (("").equals(text)) {
-            return new ArrayList<>();
+    public ItemDto save(ItemDto itemDto, long userId) {
+        Item item = itemMapper.toItem(itemDto);
+        try {
+            item.setOwner(userRepository.findById(userId).orElseThrow());
+            return itemMapper.toItemDto(itemRepository.save(item));
+        } catch (Exception exception) {
+            throw new StorageException("Incorrect userId");
         }
+    }
 
-        Predicate<Item> inName = item -> item.getName().toLowerCase().contains(text.toLowerCase());
-        Predicate<Item> inDesc = item -> item.getDescription().toLowerCase().contains(text.toLowerCase());
+    @Override
+    public ItemDto update(ItemDto itemDto, long userId, long id) {
 
-        return itemStorage.getAllItems()
+        try {
+            Item oldItem = itemRepository.findById(id).orElseThrow();
+
+            if (oldItem.getOwner().getId() == userId) {
+
+                if (itemDto.getName() != null) {
+                    oldItem.setName(itemDto.getName());
+                }
+                if (itemDto.getDescription() != null) {
+                    oldItem.setDescription(itemDto.getDescription());
+                }
+                if (itemDto.getAvailable() != null) {
+                    oldItem.setAvailable(itemDto.getAvailable());
+                }
+                return itemMapper.toItemDto(itemRepository.update(oldItem));
+            } else {
+                throw new StorageException("Incorrect userId");
+            }
+        } catch (Exception e) {
+            throw new StorageException("Incorrect ItemId");
+        }
+    }
+
+    @Override
+    public void deleteById(long itemId) {
+        itemRepository.deleteById(itemId);
+    }
+
+    @Override
+    public List<ItemDto> searchItem(String text) {
+        return itemRepository.searchItem(text)
                 .stream()
-                .filter(inName.or(inDesc))
-                .filter(Item::getAvailable)
-                .map(ItemMapper::toItemDto)
+                .map(itemMapper::toItemDto)
                 .collect(Collectors.toList());
     }
 }

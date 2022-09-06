@@ -1,7 +1,7 @@
 package ru.practicum.shareit.booking.dto;
 
 /**
- * // TODO .
+ * // TODO in next SPRINT .
  */
 public class BookingDto {
 }

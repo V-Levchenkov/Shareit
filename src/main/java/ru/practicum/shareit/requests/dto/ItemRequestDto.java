@@ -1,7 +1,7 @@
 package ru.practicum.shareit.requests.dto;
 
 /**
- * // TODO .
+ * // TODO in next SPRINT
  */
 public class ItemRequestDto {
 }

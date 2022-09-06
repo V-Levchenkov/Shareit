@@ -6,9 +6,6 @@ import lombok.NoArgsConstructor;
 import ru.practicum.shareit.requests.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 
-/**
- * // TODO .
- */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

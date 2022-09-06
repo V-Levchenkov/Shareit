@@ -9,9 +9,6 @@ import ru.practicum.shareit.item.service.ItemService;
 import javax.validation.Valid;
 import java.util.List;
 
-/**
- * // TODO .
- */
 
 @RestController
 @Slf4j

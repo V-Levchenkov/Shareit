@@ -1,7 +1,7 @@
 package ru.practicum.shareit.booking;
 
 /**
- * // TODO .
+ * // TODO in next SPRINT
  */
 public class Booking {
 }

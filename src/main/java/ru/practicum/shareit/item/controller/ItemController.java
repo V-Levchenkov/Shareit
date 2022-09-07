@@ -43,7 +43,7 @@ public class ItemController {
         return itemService.update(itemDto, userId, id);
     }
 
-    //POST /items/{itemId}/comment
+
     @PostMapping("/{itemId}/comment")
     public CommentDto createComment(@RequestHeader("X-Sharer-User-Id") long userId,
                                     @Valid @RequestBody CommentDto commentDto,

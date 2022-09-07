@@ -59,7 +59,7 @@ public class ItemServiceImpl implements ItemService {
         if (item.getOwner().getId() == userId) {
             createItemDtoWithBooking(itemDtoWithBooking);
         }
-        List<Comment> comments = commentRepository.findAllByItem_Id(itemId);
+        List<Comment> comments = commentRepository.findAllByItemId(itemId);
         if (!comments.isEmpty()) {
             itemDtoWithBooking.setComments(comments
                     .stream().map(commentMapper::toCommentDto)
@@ -77,7 +77,7 @@ public class ItemServiceImpl implements ItemService {
                 .collect(Collectors.toList());
         for (ItemDtoWithBooking itemDtoWithBooking : result) {
             createItemDtoWithBooking(itemDtoWithBooking);
-            List<Comment> comments = commentRepository.findAllByItem_Id(itemDtoWithBooking.getId());
+            List<Comment> comments = commentRepository.findAllByItemId(itemDtoWithBooking.getId());
             if (!comments.isEmpty()) {
                 itemDtoWithBooking.setComments(comments
                         .stream().map(commentMapper::toCommentDto)

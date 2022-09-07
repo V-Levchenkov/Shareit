@@ -90,14 +90,14 @@ public class ItemServiceImpl implements ItemService {
 
     private void createItemDtoWithBooking(ItemDtoWithBooking itemDtoWithBooking) {
         List<Booking> lastBookings = bookingRepository
-                .findBookingsByItem_IdAndEndIsBeforeOrderByEndDesc(itemDtoWithBooking.getId(),
+                .findBookingsByItemIdAndEndIsBeforeOrderByEndDesc(itemDtoWithBooking.getId(),
                         LocalDateTime.now());
         if (!lastBookings.isEmpty()) {
             BookingDtoForItem lastBooking = bookingMapper.toBookingDtoForItem(lastBookings.get(0));
             itemDtoWithBooking.setLastBooking(lastBooking);
         }
         List<Booking> nextBookings = bookingRepository
-                .findBookingsByItem_IdAndStartIsAfterOrderByStartDesc(itemDtoWithBooking.getId(),
+                .findBookingsByItemIdAndStartIsAfterOrderByStartDesc(itemDtoWithBooking.getId(),
                         LocalDateTime.now());
         if (!nextBookings.isEmpty()) {
             BookingDtoForItem nextBooking = bookingMapper.toBookingDtoForItem(nextBookings.get(0));
@@ -122,7 +122,7 @@ public class ItemServiceImpl implements ItemService {
                 new StorageException("Вещи с Id = " + itemId + " нет в БД"));
         User user = userRepository.findById(userId).orElseThrow(() ->
                 new StorageException("Пользователя с Id = " + userId + " нет в БД"));
-        if (bookingRepository.searchBookingByBooker_IdAndItem_IdAndEndIsBefore(userId, itemId, LocalDateTime.now())
+        if (bookingRepository.searchBookingByBookerIdAndItemIdAndEndIsBefore(userId, itemId, LocalDateTime.now())
                 .stream().noneMatch(booking -> booking.getStatus().equals(Status.APPROVED))
         ) {
             throw new BookingException("Пользователь с Id = " + userId + " не брал в аренду вещь с Id = " + itemId);

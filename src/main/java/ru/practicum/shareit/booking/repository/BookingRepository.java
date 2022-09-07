@@ -10,30 +10,30 @@ import java.util.List;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
-    List<Booking> findByBooker_IdOrderByStartDesc(long userId);
+    List<Booking> findByBookerIdOrderByStartDesc(long userId);
 
-    List<Booking> searchBookingByItem_Owner_Id(long id);
+    List<Booking> searchBookingByItemOwnerId(long id);
 
-    List<Booking> searchBookingByBooker_IdAndItem_IdAndEndIsBefore(long id, long itemId, LocalDateTime time);
+    List<Booking> searchBookingByBookerIdAndItemIdAndEndIsBefore(long id, long itemId, LocalDateTime time);
 
-    List<Booking> searchBookingByItem_Owner_IdAndStartIsAfterOrderByStartDesc(long id, LocalDateTime time);
+    List<Booking> searchBookingByItemOwnerIdAndStartIsAfterOrderByStartDesc(long id, LocalDateTime time);
 
-    List<Booking> findByBooker_IdAndStartAfterOrderByStartDesc(long userId, LocalDateTime time);
+    List<Booking> findByBookerIdAndStartAfterOrderByStartDesc(long userId, LocalDateTime time);
 
-    List<Booking> findBookingsByItem_IdAndEndIsBeforeOrderByEndDesc(long id, LocalDateTime time);
+    List<Booking> findBookingsByItemIdAndEndIsBeforeOrderByEndDesc(long id, LocalDateTime time);
 
-    List<Booking> findBookingsByItem_IdAndStartIsAfterOrderByStartDesc(long id, LocalDateTime time);
+    List<Booking> findBookingsByItemIdAndStartIsAfterOrderByStartDesc(long id, LocalDateTime time);
 
-    List<Booking> findBookingsByBooker_IdAndStatusOrderByStartDesc(long userId, Status status);
+    List<Booking> findBookingsByBookerIdAndStatusOrderByStartDesc(long userId, Status status);
 
-    List<Booking> findBookingsByItem_Owner_IdOrderByStartDesc(long id);
+    List<Booking> findBookingsByItemOwnerIdOrderByStartDesc(long id);
 
     @Query("select b " +
             "from Booking b left join User as us on b.booker.id = us.id " +
             "where us.id = ?1 " +
             "and ?2 between b.start and b.end " +
             "order by b.start DESC")
-    List<Booking> findCurrentBookingsByBooker_IdOrderByStartDesc(long userId, LocalDateTime time);
+    List<Booking> findCurrentBookingsByBookerIdOrderByStartDesc(long userId, LocalDateTime time);
 
     @Query("select b " +
             "from Booking b left join Item as i on b.item.id = i.id " +
@@ -41,9 +41,9 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "where us.id = ?1 " +
             "and ?2 between b.start and b.end " +
             "order by b.start DESC")
-    List<Booking> findCurrentBookingsByItem_Owner_IdOrderByStartDesc(long userId, LocalDateTime time);
+    List<Booking> findCurrentBookingsByItemOwnerIdOrderByStartDesc(long userId, LocalDateTime time);
 
-    List<Booking> findBookingsByBooker_IdAndEndIsBeforeOrderByStartDesc(long userId, LocalDateTime time);
+    List<Booking> findBookingsByBookerIdAndEndIsBeforeOrderByStartDesc(long userId, LocalDateTime time);
 
-    List<Booking> findBookingsByItem_Owner_IdAndEndIsBeforeOrderByStartDesc(long userId, LocalDateTime time);
+    List<Booking> findBookingsByItemOwnerIdAndEndIsBeforeOrderByStartDesc(long userId, LocalDateTime time);
 }

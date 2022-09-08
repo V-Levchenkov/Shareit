@@ -21,7 +21,7 @@ public class Comment {
     @Column(name = "comment_text", nullable = false)
     private String text;
     @ManyToOne(optional = false)
-    @JoinColumn(name = "itemId")
+    @JoinColumn(name = "item_Id")
     private Item item;
     @ManyToOne(optional = false)
     @JoinColumn(name = "author_id")

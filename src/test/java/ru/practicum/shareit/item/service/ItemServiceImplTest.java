@@ -141,6 +141,7 @@ class ItemServiceImplTest {
         assertEquals(comment.getId(), commentDto.getId());
         verify(commentRepository, times(1)).save(any());
     }
+
     @Test
     void exceptionIncorrectUserIdTest() {
         Item item = createItem();
@@ -153,6 +154,7 @@ class ItemServiceImplTest {
                         item.getOwner().getId(), commentDto));
         assertNotNull(thrown.getMessage());
     }
+
     @Test
     void exceptionIncorrectItemIdTest() {
         Item item = createItem();

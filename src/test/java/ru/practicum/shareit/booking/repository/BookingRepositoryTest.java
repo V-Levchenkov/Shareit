@@ -52,7 +52,7 @@ class BookingRepositoryTest {
     }
 
     @Test
-    void findByBooker_Id() {
+    void findByBookerId() {
         final List<Booking> bookings = bookingRepository.findByBookerId(booker.getId(),
                 Pageable.unpaged());
         assertNotNull(bookings);
@@ -164,13 +164,7 @@ class BookingRepositoryTest {
 
     @Test
     void findCurrentBookingsByBookerIdTest() {
-        List<Booking> bookings = bookingRepository
-                .findCurrentBookingsByBookerId(booker.getId(),
-                        LocalDateTime.now(),
-                        Pageable.unpaged());
-        assertNotNull(bookings);
-        assertEquals(0, bookings.size());
-
+        List<Booking> bookings;
         final Booking booking1 = bookingRepository.save(new Booking(2L,
                 LocalDateTime.now().minusDays(5),
                 LocalDateTime.now().plusDays(10),
@@ -186,13 +180,7 @@ class BookingRepositoryTest {
 
     @Test
     void findCurrentBookingsByItemOwnerIdTest() {
-        List<Booking> bookings = bookingRepository
-                .findCurrentBookingsByItemOwnerId(item.getOwner().getId(),
-                        LocalDateTime.now(),
-                        Pageable.unpaged());
-        assertNotNull(bookings);
-        assertEquals(0, bookings.size());
-
+        List<Booking> bookings;
         final Booking booking1 = bookingRepository.save(new Booking(2L,
                 LocalDateTime.now().minusDays(5),
                 LocalDateTime.now().plusDays(10),

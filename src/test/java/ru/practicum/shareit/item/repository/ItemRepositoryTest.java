@@ -21,11 +21,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class ItemRepositoryTest {
 
     @Autowired
-    ItemRepository itemRepository;
+    private ItemRepository itemRepository;
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
-    ItemRequestRepository itemRequestRepository;
+    private ItemRequestRepository itemRequestRepository;
 
     private Item item;
     private User user1;
@@ -63,7 +63,7 @@ class ItemRepositoryTest {
     }
 
     @Test
-    void findAllByItemRequest_Id() {
+    void findAllByItemRequestId() {
         final List<Item> items = itemRepository.findAllByItemRequestId(itemRequest.getId());
         assertSame(user2, itemRequest.getRequestor());
         assertNotNull(items);

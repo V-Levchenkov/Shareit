@@ -43,10 +43,12 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDto findById(long bookingId, long userId) {
+        log.info("Поиск по bookingId");
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new StorageException("Бронирования с Id = " + bookingId + " нет в БД"));
         if (booking.getBooker().getId() != userId
                 && booking.getItem().getOwner().getId() != userId) {
+            log.error("Incorrect userId");
             throw new StorageException("Incorrect userId");
         }
         return mapper.toBookingDto(booking);
@@ -55,7 +57,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<BookingDto> findAll(long userId, String state, int from, int size) {
-
+        log.info("Запрос на поиск всех аренд");
         userRepository.findById(userId).orElseThrow(() -> new StorageException("Incorrect userId"));
         int page = from / size;
         Pageable pageable = PageRequest.of(page, size, Sort.by("start").descending());
@@ -86,16 +88,20 @@ public class BookingServiceImpl implements BookingService {
                             .stream()
                             .map(mapper::toBookingDto).collect(Collectors.toList());
                 default:
+                    log.warn("Unknown state: UNSUPPORTED_STATUS");
                     throw new BookingException("Unknown state: UNSUPPORTED_STATUS");
             }
         } catch (IllegalArgumentException e) {
+            log.error("Unknown state: UNSUPPORTED_STATUS");
             throw new BookingException("Unknown state: UNSUPPORTED_STATUS");
         }
     }
 
     @Override
     public BookingDto save(BookingDtoSimple bookingDtoSimple, long userId) {
+        log.info("Сохранение");
         if (bookingDtoSimple.getEnd().isBefore(bookingDtoSimple.getStart())) {
+            log.error("Incorrect end time");
             throw new BookingException("Incorrect end time");
         }
         Booking booking = mapper.fromSimpleToBooking(bookingDtoSimple);
@@ -104,10 +110,13 @@ public class BookingServiceImpl implements BookingService {
                 .orElseThrow(() -> new StorageException("Вещи с Id = "
                         + bookingDtoSimple.getItemId() + " нет в базе данных"));
         if (!item.getAvailable()) {
+            log.warn("Вещь с Id = " + bookingDtoSimple.getItemId() +
+                    " не доступна для аренды");
             throw new ItemException("Вещь с Id = " + bookingDtoSimple.getItemId() +
                     " не доступна для аренды");
         }
         if (item.getOwner().getId() == userId) {
+            log.warn("Владелец вещи не может забронировать свою вещь");
             throw new StorageException("Владелец вещи не может забронировать свою вещь");
         } else {
             booking.setItem(item);
@@ -117,6 +126,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDto update(long bookingId, BookingDto bookingDto) {
+        log.info("Запрос на обновление");
         BookingDto oldBookingDto = mapper.toBookingDto(bookingRepository.findById(bookingId)
                 .orElseThrow());
         if (bookingDto.getStart() != null) {
@@ -144,14 +154,18 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDto approve(long userId, long bookingId, Boolean approved) {
+        log.info("Подтверждение аренды");
         Booking booking = bookingRepository.findById(bookingId).orElseThrow();
         if (booking.getItem().getOwner().getId() != userId) {
+            log.error("Подтвердить бронирование может только владелец вещи");
             throw new StorageException("Подтвердить бронирование может только владелец вещи");
         }
         if (booking.getStatus().equals(Status.APPROVED)) {
+            log.warn("Бронирование уже подтверждено");
             throw new BookingException("Бронирование уже подтверждено");
         }
         if (approved == null) {
+            log.warn("Необходимо указать approved");
             throw new BookingException("Необходимо указать approved");
         } else if (approved) {
             booking.setStatus(Status.APPROVED);
@@ -164,12 +178,14 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<BookingDto> findAllByItemOwnerId(long userId, String state, int from, int size) {
+        log.info("Запрошен поиск по вещи и владельцу");
         userRepository.findById(userId).orElseThrow(() -> new StorageException("Incorrect userId"));
         int page = from / size;
         Pageable pageable = PageRequest.of(page, size, Sort.by("start").descending());
         List<BookingDto> result = bookingRepository.searchBookingByItemOwnerId(userId, pageable).stream()
                 .map(mapper::toBookingDto).collect(Collectors.toList());
         if (result.isEmpty()) {
+            log.error("У пользователя нет вещей");
             throw new StorageException("У пользователя нет вещей");
         }
         try {
@@ -194,9 +210,11 @@ public class BookingServiceImpl implements BookingService {
                             .filter(booking -> booking.getStatus().equals(Status.REJECTED))
                             .map(mapper::toBookingDto).collect(Collectors.toList());
                 default:
+                    log.error("Unknown state: UNSUPPORTED_STATUS");
                     throw new BookingException("Unknown state: UNSUPPORTED_STATUS");
             }
         } catch (IllegalArgumentException e) {
+            log.error("Unknown state: UNSUPPORTED_STATUS");
             throw new BookingException("Unknown state: UNSUPPORTED_STATUS");
         }
     }

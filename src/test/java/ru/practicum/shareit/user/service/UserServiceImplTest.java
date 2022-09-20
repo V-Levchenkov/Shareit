@@ -17,9 +17,9 @@ import static org.mockito.Mockito.*;
 
 class UserServiceImplTest {
 
-    UserService userService;
-    UserRepository userRepository;
-    UserMapper userMapper;
+    private UserService userService;
+    private UserRepository userRepository;
+    private UserMapper userMapper;
 
     @BeforeEach
     void beforeEach() {

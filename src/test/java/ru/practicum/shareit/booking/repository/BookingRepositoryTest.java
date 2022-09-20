@@ -22,11 +22,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class BookingRepositoryTest {
 
     @Autowired
-    ItemRepository itemRepository;
+    private ItemRepository itemRepository;
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
-    BookingRepository bookingRepository;
+    private BookingRepository bookingRepository;
 
     private Item item;
     private User owner;
@@ -61,7 +61,7 @@ class BookingRepositoryTest {
     }
 
     @Test
-    void searchBookingByItem_Owner_Id() {
+    void searchBookingByItemOwnerId() {
         final List<Booking> bookings = bookingRepository.searchBookingByItemOwnerId(owner.getId(),
                 Pageable.unpaged());
         assertNotNull(bookings);
@@ -70,7 +70,7 @@ class BookingRepositoryTest {
     }
 
     @Test
-    void searchBookingByBooker_IdAndItem_IdAndEndIsBeforeAndStatus() {
+    void searchBookingByBookerIdAndItemIdAndEndIsBeforeAndStatus() {
         final List<Booking> bookings = bookingRepository
                 .searchBookingByBookerIdAndItemIdAndEndIsBeforeAndStatus(booker.getId(),
                         item.getId(),
@@ -82,7 +82,7 @@ class BookingRepositoryTest {
     }
 
     @Test
-    void searchBookingByItem_Owner_IdAndStartIsAfter() {
+    void searchBookingByItemOwnerIdAndStartIsAfter() {
         List<Booking> bookings = bookingRepository
                 .searchBookingByItemOwnerIdAndStartIsAfter(owner.getId(),
                         LocalDateTime.now(),
@@ -103,7 +103,7 @@ class BookingRepositoryTest {
     }
 
     @Test
-    void findByBooker_IdAndStartAfter() {
+    void findByBookerIdAndStartAfter() {
         List<Booking> bookings = bookingRepository
                 .findByBookerIdAndStartAfter(booker.getId(),
                         LocalDateTime.now(),
@@ -125,7 +125,7 @@ class BookingRepositoryTest {
     }
 
     @Test
-    void findBookingsByItem_IdAndEndIsBeforeOrderByEndDesc() {
+    void findBookingsByItemIdAndEndIsBeforeOrderByEndDesc() {
         final List<Booking> bookings = bookingRepository
                 .findBookingsByItemIdAndEndIsBeforeOrderByEndDesc(item.getId(),
                         LocalDateTime.now());
@@ -135,7 +135,7 @@ class BookingRepositoryTest {
     }
 
     @Test
-    void findBookingsByItem_IdAndStartIsAfterOrderByStartDesc() {
+    void findBookingsByItemIdAndStartIsAfterOrderByStartDesc() {
         List<Booking> bookings = bookingRepository
                 .findBookingsByItemIdAndStartIsAfterOrderByStartDesc(item.getId(),
                         LocalDateTime.now());
@@ -155,7 +155,7 @@ class BookingRepositoryTest {
     }
 
     @Test
-    void findBookingsByBooker_IdAndStatus() {
+    void findBookingsByBookerIdAndStatus() {
         final List<Booking> bookings = bookingRepository
                 .findBookingsByBookerIdAndStatus(booker.getId(),
                         Status.APPROVED,
@@ -166,7 +166,7 @@ class BookingRepositoryTest {
     }
 
     @Test
-    void findBookingsByItem_Owner_Id() {
+    void findBookingsByItemOwnerId() {
         final List<Booking> bookings = bookingRepository
                 .findBookingsByItemOwnerId(item.getOwner().getId(),
                         Pageable.unpaged());
@@ -176,7 +176,7 @@ class BookingRepositoryTest {
     }
 
     @Test
-    void findCurrentBookingsByBooker_Id() {
+    void findCurrentBookingsByBookerId() {
         List<Booking> bookings = bookingRepository
                 .findCurrentBookingsByBookerId(booker.getId(),
                         LocalDateTime.now(),
@@ -198,7 +198,7 @@ class BookingRepositoryTest {
     }
 
     @Test
-    void findCurrentBookingsByItem_Owner_Id() {
+    void findCurrentBookingsByItemOwnerId() {
         List<Booking> bookings = bookingRepository
                 .findCurrentBookingsByItemOwnerId(item.getOwner().getId(),
                         LocalDateTime.now(),
@@ -220,7 +220,7 @@ class BookingRepositoryTest {
     }
 
     @Test
-    void findBookingsByBooker_IdAndEndIsBefore() {
+    void findBookingsByBookerIdAndEndIsBefore() {
         final List<Booking> bookings = bookingRepository
                 .findBookingsByBookerIdAndEndIsBefore(booker.getId(),
                         LocalDateTime.now(),
@@ -231,7 +231,7 @@ class BookingRepositoryTest {
     }
 
     @Test
-    void findBookingsByItem_Owner_IdAndEndIsBefore() {
+    void findBookingsByItemOwnerIdAndEndIsBefore() {
         final List<Booking> bookings = bookingRepository
                 .findBookingsByItemOwnerIdAndEndIsBefore(item.getOwner().getId(),
                         LocalDateTime.now(),

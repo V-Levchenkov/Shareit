@@ -36,6 +36,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
     @Override
     public ItemRequestDto save(ItemRequestDto itemRequestDto, long userId) {
+        log.info("Запрошен метод save");
         ItemRequest itemRequest = mapper.toItemRequest(itemRequestDto);
         itemRequest.setRequestor(userRepository.findById(userId)
                 .orElseThrow(() -> new StorageException("Incorrect userId")));
@@ -44,6 +45,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
     @Override
     public List<ItemRequestDtoWithItems> findAll(long userId) {
+        log.info("Запрошен метод поиска всех запросов по userId");
         userRepository.findById(userId).orElseThrow(() ->
                 new StorageException("Пользователя с Id = " + userId + " нет в БД"));
         return itemRequestRepository.findAllByRequestorIdOrderByCreatedDesc(userId)
@@ -54,6 +56,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
     @Override
     public ItemRequestDtoWithItems findById(long userId, long itemRequestId) {
+        log.info("Запрошен метод поиска запроса по userId и itemRequestId");
         userRepository.findById(userId).orElseThrow(() ->
                 new StorageException("Пользователя с Id = " + userId + " нет в БД"));
         ItemRequest itemRequest = itemRequestRepository

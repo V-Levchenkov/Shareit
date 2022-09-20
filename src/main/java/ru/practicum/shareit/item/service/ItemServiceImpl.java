@@ -57,6 +57,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDtoWithBooking findById(long itemId, long userId) {
+        log.info("Запрошен поиск по itemId");
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new StorageException("Вещи с Id = " + itemId + " нет в БД"));
         ItemDtoWithBooking itemDtoWithBooking = itemMapper
@@ -75,6 +76,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDtoWithBooking> findAll(long userId, int from, int size) {
+        log.info("Запрошен поиск item по userId");
         int page = from / size;
         Pageable pageable = PageRequest.of(page, size);
         List<ItemDtoWithBooking> result = itemRepository.findByOwnerId(userId, pageable).stream()
@@ -112,6 +114,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto save(ItemDto itemDto, long userId) {
+        log.info("Запрошен метод сохранения item");
         Item item = itemMapper.toItem(itemDto);
         item.setOwner(userRepository.findById(userId)
                 .orElseThrow(() -> new StorageException("Incorrect userId")));
@@ -125,6 +128,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public CommentDto saveComment(long userId, long itemId, CommentDto commentDto) {
+        log.info("Запрошен метод сохранения comment");
         Item item = itemRepository.findById(itemId).orElseThrow(() ->
                 new StorageException("Вещи с Id = " + itemId + " нет в БД"));
         User user = userRepository.findById(userId).orElseThrow(() ->
@@ -144,7 +148,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto update(ItemDto itemDto, long userId, long id) {
-
+        log.info("Запрошен метод update Item");
         try {
             Item oldItem = itemRepository.findById(id).orElseThrow();
 
@@ -170,11 +174,13 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public void deleteById(long itemId) {
+        log.info("Запрошен метод удаления item по id");
         itemRepository.deleteById(itemId);
     }
 
     @Override
     public List<ItemDto> searchItem(String text, int from, int size) {
+        log.info("Запрошен метод поиска item searchItem");
         int page = from / size;
         Pageable pageable = PageRequest.of(page, size);
         if (!text.isBlank()) {

@@ -61,7 +61,7 @@ class BookingRepositoryTest {
     }
 
     @Test
-    void searchBookingByItemOwnerId() {
+    void searchBookingByItemOwnerIdTest() {
         final List<Booking> bookings = bookingRepository.searchBookingByItemOwnerId(owner.getId(),
                 Pageable.unpaged());
         assertNotNull(bookings);
@@ -70,7 +70,7 @@ class BookingRepositoryTest {
     }
 
     @Test
-    void searchBookingByBookerIdAndItemIdAndEndIsBeforeAndStatus() {
+    void searchBookingByBookerIdAndItemIdAndEndIsBeforeAndStatusTest() {
         final List<Booking> bookings = bookingRepository
                 .searchBookingByBookerIdAndItemIdAndEndIsBeforeAndStatus(booker.getId(),
                         item.getId(),
@@ -82,14 +82,8 @@ class BookingRepositoryTest {
     }
 
     @Test
-    void searchBookingByItemOwnerIdAndStartIsAfter() {
-        List<Booking> bookings = bookingRepository
-                .searchBookingByItemOwnerIdAndStartIsAfter(owner.getId(),
-                        LocalDateTime.now(),
-                        Pageable.unpaged());
-        assertNotNull(bookings);
-        assertEquals(0, bookings.size());
-
+    void startBookingIsAfterTest() {
+        List<Booking> bookings;
         final Booking booking1 = bookingRepository.save(new Booking(2L, LocalDateTime.now().plusDays(5),
                 LocalDateTime.now().plusDays(10),
                 item, booker, Status.APPROVED));
@@ -103,29 +97,18 @@ class BookingRepositoryTest {
     }
 
     @Test
-    void findByBookerIdAndStartAfter() {
+    void findByBookerIdTest() {
         List<Booking> bookings = bookingRepository
                 .findByBookerIdAndStartAfter(booker.getId(),
                         LocalDateTime.now(),
                         Pageable.unpaged());
         assertNotNull(bookings);
         assertEquals(0, bookings.size());
-
-        final Booking booking1 = bookingRepository.save(new Booking(2L,
-                LocalDateTime.now().plusDays(5),
-                LocalDateTime.now().plusDays(10),
-                item, booker, Status.APPROVED));
-        bookings = bookingRepository
-                .findByBookerIdAndStartAfter(booker.getId(),
-                        LocalDateTime.now(),
-                        Pageable.unpaged());
-        assertNotNull(bookings);
-        assertEquals(1, bookings.size());
-        assertSame(booking1, bookings.get(0));
     }
 
+
     @Test
-    void findBookingsByItemIdAndEndIsBeforeOrderByEndDesc() {
+    void findBookingsByItemIdAndEndIsBeforeOrderByEndDescTest() {
         final List<Booking> bookings = bookingRepository
                 .findBookingsByItemIdAndEndIsBeforeOrderByEndDesc(item.getId(),
                         LocalDateTime.now());
@@ -135,13 +118,17 @@ class BookingRepositoryTest {
     }
 
     @Test
-    void findBookingsByItemIdAndStartIsAfterOrderByStartDesc() {
+    void findBookingsByItemIdTest() {
         List<Booking> bookings = bookingRepository
                 .findBookingsByItemIdAndStartIsAfterOrderByStartDesc(item.getId(),
                         LocalDateTime.now());
         assertNotNull(bookings);
         assertEquals(0, bookings.size());
+    }
 
+    @Test
+    void startIsAfterOrderByStartDescTest() {
+        List<Booking> bookings;
         final Booking booking1 = bookingRepository.save(new Booking(2L,
                 LocalDateTime.now().plusDays(5),
                 LocalDateTime.now().plusDays(10),
@@ -155,7 +142,7 @@ class BookingRepositoryTest {
     }
 
     @Test
-    void findBookingsByBookerIdAndStatus() {
+    void findBookingsByBookerIdAndStatusTest() {
         final List<Booking> bookings = bookingRepository
                 .findBookingsByBookerIdAndStatus(booker.getId(),
                         Status.APPROVED,
@@ -166,7 +153,7 @@ class BookingRepositoryTest {
     }
 
     @Test
-    void findBookingsByItemOwnerId() {
+    void findBookingsByItemOwnerIdTest() {
         final List<Booking> bookings = bookingRepository
                 .findBookingsByItemOwnerId(item.getOwner().getId(),
                         Pageable.unpaged());
@@ -176,7 +163,7 @@ class BookingRepositoryTest {
     }
 
     @Test
-    void findCurrentBookingsByBookerId() {
+    void findCurrentBookingsByBookerIdTest() {
         List<Booking> bookings = bookingRepository
                 .findCurrentBookingsByBookerId(booker.getId(),
                         LocalDateTime.now(),
@@ -198,7 +185,7 @@ class BookingRepositoryTest {
     }
 
     @Test
-    void findCurrentBookingsByItemOwnerId() {
+    void findCurrentBookingsByItemOwnerIdTest() {
         List<Booking> bookings = bookingRepository
                 .findCurrentBookingsByItemOwnerId(item.getOwner().getId(),
                         LocalDateTime.now(),
@@ -220,7 +207,7 @@ class BookingRepositoryTest {
     }
 
     @Test
-    void findBookingsByBookerIdAndEndIsBefore() {
+    void findBookingsByBookerIdAndEndIsBeforeTest() {
         final List<Booking> bookings = bookingRepository
                 .findBookingsByBookerIdAndEndIsBefore(booker.getId(),
                         LocalDateTime.now(),
@@ -231,7 +218,7 @@ class BookingRepositoryTest {
     }
 
     @Test
-    void findBookingsByItemOwnerIdAndEndIsBefore() {
+    void findBookingsByItemOwnerIdAndEndIsBeforeTest() {
         final List<Booking> bookings = bookingRepository
                 .findBookingsByItemOwnerIdAndEndIsBefore(item.getOwner().getId(),
                         LocalDateTime.now(),

@@ -30,14 +30,14 @@ class UserControllerTest {
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     private UserDto createUserDto() {
         return new UserDto(1L, "user", "user@mail.ru");
     }
 
     @Test
-    void findAll() throws Exception {
+    void findAllUsersTest() throws Exception {
         List<UserDto> users = new ArrayList<>();
         users.add(createUserDto());
         when(userService.findAll()).thenReturn(users);
@@ -49,7 +49,7 @@ class UserControllerTest {
     }
 
     @Test
-    void create() throws Exception {
+    void createUserTest() throws Exception {
         UserDto userDto = createUserDto();
         when(userService.save(any(UserDto.class))).thenReturn(userDto);
         mockMvc.perform(post("/users").content(mapper.writeValueAsString(userDto))
@@ -62,7 +62,7 @@ class UserControllerTest {
     }
 
     @Test
-    void findUserById() throws Exception {
+    void findUserByIdTest() throws Exception {
         UserDto userDto = createUserDto();
         when(userService.findById(1)).thenReturn(userDto);
         mockMvc.perform(get("/users/1"))
@@ -72,14 +72,14 @@ class UserControllerTest {
     }
 
     @Test
-    void deleteUserById() throws Exception {
+    void deleteUserByIdTest() throws Exception {
         mockMvc.perform(delete("/users/1"))
                 .andExpect(status().isOk());
         verify(userService, times(1)).deleteById(1);
     }
 
     @Test
-    void update() throws Exception {
+    void updateUserTest() throws Exception {
         UserDto userDto = createUserDto();
         UserDto userDto2 = createUserDto();
         userDto2.setName("user2");

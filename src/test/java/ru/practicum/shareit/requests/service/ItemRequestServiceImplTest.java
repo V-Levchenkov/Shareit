@@ -50,7 +50,7 @@ class ItemRequestServiceImplTest {
     }
 
     @Test
-    void save() {
+    void saveItemRequestTest() {
         when(itemRequestRepository.save(any(ItemRequest.class)))
                 .thenReturn(itemRequest);
         when(userRepository.findById(itemRequest.getRequestor().getId()))
@@ -66,7 +66,7 @@ class ItemRequestServiceImplTest {
     }
 
     @Test
-    void findAll() {
+    void findAllRequestsTest() {
         when(userRepository.findById(itemRequest.getRequestor().getId()))
                 .thenReturn(Optional.of(itemRequest.getRequestor()));
         when(itemRequestRepository
@@ -82,7 +82,7 @@ class ItemRequestServiceImplTest {
     }
 
     @Test
-    void findById() {
+    void findRequestByIdTest() {
         Long itemRequestId = itemRequest.getId();
         when(userRepository.findById(itemRequest.getRequestor().getId()))
                 .thenReturn(Optional.of(itemRequest.getRequestor()));
@@ -102,7 +102,7 @@ class ItemRequestServiceImplTest {
     }
 
     @Test
-    void findAllWithPageable() {
+    void findAllWithPageableRequestsTest() {
         when(userRepository.findById(itemRequest.getRequestor().getId()))
                 .thenReturn(Optional.of(itemRequest.getRequestor()));
         when(itemRequestRepository

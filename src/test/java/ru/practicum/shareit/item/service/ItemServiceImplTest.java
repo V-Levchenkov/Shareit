@@ -63,7 +63,7 @@ class ItemServiceImplTest {
     }
 
     @Test
-    void findById() {
+    void findItemByIdTest() {
         Item item = createItem();
         Long itemId = item.getId();
         long incorrectId = (long) (Math.random() * 100) + itemId + 3;
@@ -81,7 +81,7 @@ class ItemServiceImplTest {
     }
 
     @Test
-    void findAll() {
+    void findAllItemsTest() {
         Item item = createItem();
         User userWriteComment = item.getItemRequest().getRequestor();
         Comment comment = createComment(item, userWriteComment);
@@ -99,7 +99,7 @@ class ItemServiceImplTest {
     }
 
     @Test
-    void save() {
+    void saveItemTest() {
         Item item = createItem();
         when(itemRepository.save(item))
                 .thenReturn(item);
@@ -116,7 +116,7 @@ class ItemServiceImplTest {
     }
 
     @Test
-    void saveComment() {
+    void saveCommentForItemTest() {
         Item item = createItem();
         User userWriteComment = item.getItemRequest().getRequestor();
         Comment comment = createComment(item, userWriteComment);
@@ -140,15 +140,29 @@ class ItemServiceImplTest {
         assertEquals(userWriteComment.getName(), commentDto.getAuthorName());
         assertEquals(comment.getId(), commentDto.getId());
         verify(commentRepository, times(1)).save(any());
+    }
+    @Test
+    void exceptionIncorrectUserIdTest() {
+        Item item = createItem();
+        User userWriteComment = item.getItemRequest().getRequestor();
+        Comment comment = createComment(item, userWriteComment);
+        CommentDto commentDto = commentMapper.toCommentDto(comment);
         long incorrectUserId = 10L;
         Throwable thrown = assertThrows(StorageException.class,
                 () -> itemService.saveComment(incorrectUserId,
-                        item.getOwner().getId(), commentDto1));
+                        item.getOwner().getId(), commentDto));
         assertNotNull(thrown.getMessage());
+    }
+    @Test
+    void exceptionIncorrectItemIdTest() {
+        Item item = createItem();
+        User userWriteComment = item.getItemRequest().getRequestor();
+        Comment comment = createComment(item, userWriteComment);
+        CommentDto commentDto = commentMapper.toCommentDto(comment);
         long incorrectItemId = 10L;
         Throwable thrown2 = assertThrows(StorageException.class,
                 () -> itemService.saveComment(userWriteComment.getId(),
-                        incorrectItemId, commentDto1));
+                        incorrectItemId, commentDto));
         assertNotNull(thrown2.getMessage());
     }
 
@@ -162,7 +176,7 @@ class ItemServiceImplTest {
     }
 
     @Test
-    void update() {
+    void updateItemTest() {
         Item item = createItem();
         Item item2 = createItem();
         long itemId = item.getId();
@@ -180,14 +194,14 @@ class ItemServiceImplTest {
     }
 
     @Test
-    void deleteById() {
+    void deleteItemByIdTest() {
         Item item = createItem();
         itemService.deleteById(item.getId());
         verify(itemRepository, times(1)).deleteById(item.getId());
     }
 
     @Test
-    void searchItem() {
+    void searchItemByTextTest() {
         List<Item> items = new ArrayList<>();
         Item item = createItem();
         items.add(item);

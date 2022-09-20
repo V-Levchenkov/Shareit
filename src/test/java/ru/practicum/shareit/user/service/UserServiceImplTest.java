@@ -33,7 +33,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findById() {
+    void findUserByIdTest() {
         User user = createUser();
         Long userId = user.getId();
         long incorrectId = (long) (Math.random() * 100) + userId + 3;
@@ -52,7 +52,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findAll() {
+    void findAllUsersTest() {
         User user = createUser();
         when(userRepository.findAll())
                 .thenReturn(Collections.singletonList(user));
@@ -64,7 +64,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void save() {
+    void saveUserTest() {
         User user = createUser();
         when(userRepository.save(user))
                 .thenReturn(user);
@@ -77,7 +77,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void update() {
+    void updateUserTest() {
         User user = createUser();
         User user2 = createUser();
         long userId = user.getId();
@@ -94,7 +94,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void deleteById() {
+    void deleteUserByIdTest() {
         User user = createUser();
         userService.deleteById(user.getId());
         verify(userRepository, times(1)).deleteById(user.getId());

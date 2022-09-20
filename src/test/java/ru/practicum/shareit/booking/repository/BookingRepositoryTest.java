@@ -59,6 +59,7 @@ class BookingRepositoryTest {
         assertEquals(1, bookings.size());
         assertSame(booking, bookings.get(0));
     }
+
     @Test
     void findByBookerIdAndLocalDateTimeTest() {
         List<Booking> bookings = bookingRepository

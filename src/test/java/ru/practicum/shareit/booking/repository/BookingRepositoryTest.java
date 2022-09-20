@@ -52,12 +52,21 @@ class BookingRepositoryTest {
     }
 
     @Test
-    void findByBookerId() {
+    void findByBookerIdTest() {
         final List<Booking> bookings = bookingRepository.findByBookerId(booker.getId(),
                 Pageable.unpaged());
         assertNotNull(bookings);
         assertEquals(1, bookings.size());
         assertSame(booking, bookings.get(0));
+    }
+    @Test
+    void findByBookerIdAndLocalDateTimeTest() {
+        List<Booking> bookings = bookingRepository
+                .findByBookerIdAndStartAfter(booker.getId(),
+                        LocalDateTime.now(),
+                        Pageable.unpaged());
+        assertNotNull(bookings);
+        assertEquals(0, bookings.size());
     }
 
     @Test
@@ -95,17 +104,6 @@ class BookingRepositoryTest {
         assertEquals(1, bookings.size());
         assertSame(booking1, bookings.get(0));
     }
-
-    @Test
-    void findByBookerIdTest() {
-        List<Booking> bookings = bookingRepository
-                .findByBookerIdAndStartAfter(booker.getId(),
-                        LocalDateTime.now(),
-                        Pageable.unpaged());
-        assertNotNull(bookings);
-        assertEquals(0, bookings.size());
-    }
-
 
     @Test
     void findBookingsByItemIdAndEndIsBeforeOrderByEndDescTest() {

@@ -159,6 +159,7 @@ class BookingServiceImplTest {
         assertEquals(booking.getId(), bookingDto.getId());
         verify(bookingRepository, times(1)).save(booking);
     }
+
     @Test
     void localDateTimeTest() {
         LocalDateTime errorEnd = booking.getEnd().minusDays(30);

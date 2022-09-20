@@ -62,7 +62,7 @@ class ItemControllerTest {
     }
 
     @Test
-    void findAll() throws Exception {
+    void findAllItemsTest() throws Exception {
         List<ItemDtoWithBooking> items = new ArrayList<>();
         Item item = createItem();
         ItemDtoWithBooking itemDtoWithBooking = itemMapper.toItemDtoWithBooking(item);
@@ -81,7 +81,7 @@ class ItemControllerTest {
     }
 
     @Test
-    void create() throws Exception {
+    void createItemTest() throws Exception {
         Item item = createItem();
         ItemDto itemDto = itemMapper.toItemDto(item);
         when(itemService.save(itemDto, item.getOwner().getId())).thenReturn(itemDto);
@@ -97,7 +97,7 @@ class ItemControllerTest {
     }
 
     @Test
-    void update() throws Exception {
+    void updateItemTest() throws Exception {
         Item item = createItem();
         ItemDto itemDto = itemMapper.toItemDto(item);
         Item item2 = createItem();
@@ -119,7 +119,7 @@ class ItemControllerTest {
     }
 
     @Test
-    void createComment() throws Exception {
+    void createCommentForItemTest() throws Exception {
         CommentDto commentDto = createCommentDto();
         Item item = createItem();
         when(itemService.saveComment(1, 1, commentDto))
@@ -138,7 +138,7 @@ class ItemControllerTest {
     }
 
     @Test
-    void findItemById() throws Exception {
+    void findItemByIdTest() throws Exception {
         Item item = createItem();
         ItemDtoWithBooking itemDtoWithBooking = itemMapper.toItemDtoWithBooking(item);
         when(itemService.findById(1, item.getOwner().getId())).thenReturn(itemDtoWithBooking);
@@ -152,14 +152,14 @@ class ItemControllerTest {
     }
 
     @Test
-    void deleteItemById() throws Exception {
+    void deleteItemByIdTest() throws Exception {
         mockMvc.perform(delete("/items/1"))
                 .andExpect(status().isOk());
         verify(itemService, times(1)).deleteById(1);
     }
 
     @Test
-    void findItemByText() throws Exception {
+    void findItemByTextTest() throws Exception {
         List<ItemDto> items = new ArrayList<>();
         Item item = createItem();
         ItemDto itemDto = itemMapper.toItemDto(item);

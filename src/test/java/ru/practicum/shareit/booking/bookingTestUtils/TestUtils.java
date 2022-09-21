@@ -4,7 +4,7 @@ import ru.practicum.shareit.booking.dto.BookingDtoSimple;
 import ru.practicum.shareit.booking.model.Booking;
 
 public class TestUtils {
-    public BookingDtoSimple toBookingDtoSimple(Booking booking) {
+    public static BookingDtoSimple toBookingDtoSimple(Booking booking) {
         return new BookingDtoSimple(booking.getId(),
                 booking.getStart(),
                 booking.getEnd(),

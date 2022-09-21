@@ -23,6 +23,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static ru.practicum.shareit.booking.bookingTestUtils.TestUtils.toBookingDtoSimple;
 import static ru.practicum.shareit.booking.enums.Status.*;
 
 class BookingServiceImplTest {
@@ -33,7 +34,6 @@ class BookingServiceImplTest {
     private UserRepository userRepository;
     private BookingMapper bookingMapper;
     private Booking booking;
-    private TestUtils testUtil = new TestUtils();
 
     @BeforeEach
     void beforeEach() {
@@ -153,7 +153,7 @@ class BookingServiceImplTest {
                 .thenReturn(Optional.of(booking.getItem()));
         when(bookingRepository.save(any(Booking.class)))
                 .thenReturn(booking);
-        BookingDto bookingDto = bookingService.save(testUtil.toBookingDtoSimple(booking),
+        BookingDto bookingDto = bookingService.save(toBookingDtoSimple(booking),
                 booking.getBooker().getId());
         assertNotNull(bookingDto);
         assertEquals("item", bookingDto.getItem().getName());
@@ -167,7 +167,7 @@ class BookingServiceImplTest {
         LocalDateTime errorEnd = booking.getEnd().minusDays(30);
         booking.setEnd(errorEnd);
         Throwable thrown = assertThrows(BookingException.class,
-                () -> bookingService.save(testUtil.toBookingDtoSimple(booking),
+                () -> bookingService.save(toBookingDtoSimple(booking),
                         booking.getBooker().getId()));
         assertNotNull(thrown.getMessage());
     }

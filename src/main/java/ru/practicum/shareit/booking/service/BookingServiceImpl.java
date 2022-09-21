@@ -43,7 +43,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDto findById(long bookingId, long userId) {
-        log.info("Поиск по bookingId: " + bookingId);
+        log.info("Поиск по bookingId: {}", bookingId);
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new StorageException("Бронирования с Id = " + bookingId + " нет в БД"));
         if (booking.getBooker().getId() != userId
@@ -57,7 +57,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<BookingDto> findAll(long userId, String state, int from, int size) {
-        log.info("Запрос на поиск всех аренд");
+        log.info("Запрос на поиск всех аренд вещей");
         userRepository.findById(userId).orElseThrow(() -> new StorageException("Incorrect userId"));
         int page = from / size;
         Pageable pageable = PageRequest.of(page, size, Sort.by("start").descending());
@@ -99,7 +99,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDto save(BookingDtoSimple bookingDtoSimple, long userId) {
-        log.info("Сохранение для userId:" + userId);
+        log.info("Запрошен метод save для UserId: {}", userId);
         if (bookingDtoSimple.getEnd().isBefore(bookingDtoSimple.getStart())) {
             log.error("Incorrect end time");
             throw new BookingException("Incorrect end time");
@@ -110,13 +110,12 @@ public class BookingServiceImpl implements BookingService {
                 .orElseThrow(() -> new StorageException("Вещи с Id = "
                         + bookingDtoSimple.getItemId() + " нет в базе данных"));
         if (!item.getAvailable()) {
-            log.warn("Вещь с Id = " + bookingDtoSimple.getItemId() +
-                    " не доступна для аренды");
+            log.warn("Вещь с itemId {} не доступна для аренды", bookingDtoSimple.getItemId());
             throw new ItemException("Вещь с Id = " + bookingDtoSimple.getItemId() +
                     " не доступна для аренды");
         }
         if (item.getOwner().getId() == userId) {
-            log.warn("Владелец вещи: " + userId + " не может забронировать свою вещь");
+            log.warn("Владелец {} не может забронировать свою вещь", userId);
             throw new StorageException("Владелец вещи не может забронировать свою вещь");
         } else {
             booking.setItem(item);
@@ -126,7 +125,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDto update(long bookingId, BookingDto bookingDto) {
-        log.info("Запрос на обновление вещи: " + bookingId);
+        log.info("Запрос на обновление вещи {}", bookingId);
         BookingDto oldBookingDto = mapper.toBookingDto(bookingRepository.findById(bookingId)
                 .orElseThrow());
         if (bookingDto.getStart() != null) {
@@ -154,7 +153,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDto approve(long userId, long bookingId, Boolean approved) {
-        log.info("Подтверждение аренды для вещи: " + bookingId);
+        log.info("Подтверждение аренды для вещи: {}", bookingId);
         Booking booking = bookingRepository.findById(bookingId).orElseThrow();
         if (booking.getItem().getOwner().getId() != userId) {
             log.error("Подтвердить бронирование может только владелец вещи");
@@ -178,14 +177,14 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<BookingDto> findAllByItemOwnerId(long userId, String state, int from, int size) {
-        log.info("Запрошен поиск по вещи и владельцу: " + userId);
+        log.info("Запрошен поиск по вещи и владельцу: {}", userId);
         userRepository.findById(userId).orElseThrow(() -> new StorageException("Incorrect userId"));
         int page = from / size;
         Pageable pageable = PageRequest.of(page, size, Sort.by("start").descending());
         List<BookingDto> result = bookingRepository.searchBookingByItemOwnerId(userId, pageable).stream()
                 .map(mapper::toBookingDto).collect(Collectors.toList());
         if (result.isEmpty()) {
-            log.error("У пользователя " + userId + " нет вещей");
+            log.error("У пользователя {} нет вещей", userId);
             throw new StorageException("У пользователя нет вещей");
         }
         try {

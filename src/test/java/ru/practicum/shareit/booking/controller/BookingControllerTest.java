@@ -29,6 +29,7 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static ru.practicum.shareit.booking.bookingTestUtils.TestUtils.toBookingDtoSimple;
 import static ru.practicum.shareit.booking.enums.Status.APPROVED;
 import static ru.practicum.shareit.booking.enums.Status.REJECTED;
 
@@ -40,7 +41,6 @@ class BookingControllerTest {
     @InjectMocks
     private BookingController bookingController;
     private MockMvc mockMvc;
-    private TestUtils testUtil = new TestUtils();
     private final ObjectMapper mapper = new ObjectMapper();
     private final BookingMapper bookingMapper = new BookingMapper();
     private Booking booking;
@@ -116,7 +116,7 @@ class BookingControllerTest {
     void create() throws Exception {
         booking.setStart(LocalDateTime.now().plusDays(1));
         booking.setEnd(LocalDateTime.now().plusDays(2));
-        BookingDtoSimple bookingDtoSimple = testUtil.toBookingDtoSimple(booking);
+        BookingDtoSimple bookingDtoSimple = toBookingDtoSimple(booking);
         BookingDto bookingDto = bookingMapper.toBookingDto(booking);
         when(bookingService.save(bookingDtoSimple, 2)).thenReturn(bookingDto);
         mockMvc.perform(post("/bookings")

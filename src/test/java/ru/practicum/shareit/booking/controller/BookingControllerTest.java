@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import ru.practicum.shareit.booking.bookingTestUtils.TestUtils;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoSimple;
 import ru.practicum.shareit.booking.dto.BookingMapper;
@@ -39,6 +40,7 @@ class BookingControllerTest {
     @InjectMocks
     private BookingController bookingController;
     private MockMvc mockMvc;
+    private TestUtils testUtil = new TestUtils();
     private final ObjectMapper mapper = new ObjectMapper();
     private final BookingMapper bookingMapper = new BookingMapper();
     private Booking booking;
@@ -114,7 +116,7 @@ class BookingControllerTest {
     void create() throws Exception {
         booking.setStart(LocalDateTime.now().plusDays(1));
         booking.setEnd(LocalDateTime.now().plusDays(2));
-        BookingDtoSimple bookingDtoSimple = bookingMapper.toBookingDtoSimple(booking);
+        BookingDtoSimple bookingDtoSimple = testUtil.toBookingDtoSimple(booking);
         BookingDto bookingDto = bookingMapper.toBookingDto(booking);
         when(bookingService.save(bookingDtoSimple, 2)).thenReturn(bookingDto);
         mockMvc.perform(post("/bookings")

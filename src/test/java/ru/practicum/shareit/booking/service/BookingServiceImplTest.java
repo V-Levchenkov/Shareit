@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import ru.practicum.shareit.booking.bookingTestUtils.TestUtils;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
@@ -32,6 +33,7 @@ class BookingServiceImplTest {
     private UserRepository userRepository;
     private BookingMapper bookingMapper;
     private Booking booking;
+    private TestUtils testUtil = new TestUtils();
 
     @BeforeEach
     void beforeEach() {
@@ -151,7 +153,7 @@ class BookingServiceImplTest {
                 .thenReturn(Optional.of(booking.getItem()));
         when(bookingRepository.save(any(Booking.class)))
                 .thenReturn(booking);
-        BookingDto bookingDto = bookingService.save(bookingMapper.toBookingDtoSimple(booking),
+        BookingDto bookingDto = bookingService.save(testUtil.toBookingDtoSimple(booking),
                 booking.getBooker().getId());
         assertNotNull(bookingDto);
         assertEquals("item", bookingDto.getItem().getName());
@@ -165,7 +167,7 @@ class BookingServiceImplTest {
         LocalDateTime errorEnd = booking.getEnd().minusDays(30);
         booking.setEnd(errorEnd);
         Throwable thrown = assertThrows(BookingException.class,
-                () -> bookingService.save(bookingMapper.toBookingDtoSimple(booking),
+                () -> bookingService.save(testUtil.toBookingDtoSimple(booking),
                         booking.getBooker().getId()));
         assertNotNull(thrown.getMessage());
     }

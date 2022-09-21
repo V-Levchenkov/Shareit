@@ -43,12 +43,12 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDto findById(long bookingId, long userId) {
-        log.info("Поиск по bookingId");
+        log.info("Поиск по bookingId: " + bookingId);
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new StorageException("Бронирования с Id = " + bookingId + " нет в БД"));
         if (booking.getBooker().getId() != userId
                 && booking.getItem().getOwner().getId() != userId) {
-            log.error("Incorrect userId");
+            log.error("Incorrect userId" + userId);
             throw new StorageException("Incorrect userId");
         }
         return mapper.toBookingDto(booking);
@@ -99,7 +99,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDto save(BookingDtoSimple bookingDtoSimple, long userId) {
-        log.info("Сохранение");
+        log.info("Сохранение для userId:" + userId);
         if (bookingDtoSimple.getEnd().isBefore(bookingDtoSimple.getStart())) {
             log.error("Incorrect end time");
             throw new BookingException("Incorrect end time");
@@ -116,7 +116,7 @@ public class BookingServiceImpl implements BookingService {
                     " не доступна для аренды");
         }
         if (item.getOwner().getId() == userId) {
-            log.warn("Владелец вещи не может забронировать свою вещь");
+            log.warn("Владелец вещи: " + userId + " не может забронировать свою вещь");
             throw new StorageException("Владелец вещи не может забронировать свою вещь");
         } else {
             booking.setItem(item);
@@ -126,7 +126,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDto update(long bookingId, BookingDto bookingDto) {
-        log.info("Запрос на обновление");
+        log.info("Запрос на обновление вещи: " + bookingId);
         BookingDto oldBookingDto = mapper.toBookingDto(bookingRepository.findById(bookingId)
                 .orElseThrow());
         if (bookingDto.getStart() != null) {
@@ -154,7 +154,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDto approve(long userId, long bookingId, Boolean approved) {
-        log.info("Подтверждение аренды");
+        log.info("Подтверждение аренды для вещи: " + bookingId);
         Booking booking = bookingRepository.findById(bookingId).orElseThrow();
         if (booking.getItem().getOwner().getId() != userId) {
             log.error("Подтвердить бронирование может только владелец вещи");
@@ -178,14 +178,14 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<BookingDto> findAllByItemOwnerId(long userId, String state, int from, int size) {
-        log.info("Запрошен поиск по вещи и владельцу");
+        log.info("Запрошен поиск по вещи и владельцу: " + userId);
         userRepository.findById(userId).orElseThrow(() -> new StorageException("Incorrect userId"));
         int page = from / size;
         Pageable pageable = PageRequest.of(page, size, Sort.by("start").descending());
         List<BookingDto> result = bookingRepository.searchBookingByItemOwnerId(userId, pageable).stream()
                 .map(mapper::toBookingDto).collect(Collectors.toList());
         if (result.isEmpty()) {
-            log.error("У пользователя нет вещей");
+            log.error("У пользователя " + userId + " нет вещей");
             throw new StorageException("У пользователя нет вещей");
         }
         try {

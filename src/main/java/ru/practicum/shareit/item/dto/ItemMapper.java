@@ -2,6 +2,7 @@ package ru.practicum.shareit.item.dto;
 
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.requests.model.ItemRequest;
 
 import java.util.ArrayList;
 
@@ -9,10 +10,17 @@ import java.util.ArrayList;
 public class ItemMapper {
 
     public ItemDto toItemDto(Item item) {
-        return new ItemDto(item.getId(),
+        ItemDto itemDto = new ItemDto(item.getId(),
                 item.getName(),
                 item.getDescription(),
-                item.getAvailable());
+                item.getAvailable(),
+                null
+        );
+        ItemRequest request = item.getItemRequest();
+        if (request != null) {
+            itemDto.setRequestId(request.getId());
+        }
+        return itemDto;
     }
 
     public Item toItem(ItemDto itemDto) {
@@ -20,6 +28,7 @@ public class ItemMapper {
                 itemDto.getName(),
                 itemDto.getDescription(),
                 itemDto.getAvailable(),
+                null,
                 null);
     }
 
@@ -33,4 +42,5 @@ public class ItemMapper {
                 new ArrayList<>()
         );
     }
+
 }

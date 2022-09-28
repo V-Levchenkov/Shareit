@@ -12,7 +12,7 @@ public interface ItemService {
 
     List<ItemDtoWithBooking> findAll(long userId, int from, int size);
 
-    ItemDto save(long userId, ItemDto itemDto );
+    ItemDto save(long userId, ItemDto itemDto);
 
     ItemDto update(long userId, long id, ItemDto itemDto);
 

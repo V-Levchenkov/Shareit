@@ -2,7 +2,6 @@ package ru.practicum.shareit.requests.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.requests.dto.ItemRequestDto;
 import ru.practicum.shareit.requests.dto.ItemRequestDtoWithItems;
@@ -12,7 +11,6 @@ import java.util.List;
 
 @RestController
 @Slf4j
-@Validated
 @RequestMapping(path = "/requests")
 public class ItemRequestController {
 

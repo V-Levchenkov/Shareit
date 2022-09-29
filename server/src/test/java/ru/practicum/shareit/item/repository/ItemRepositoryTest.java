@@ -21,11 +21,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class ItemRepositoryTest {
 
     @Autowired
-    private ItemRepository itemRepository;
+    ItemRepository itemRepository;
     @Autowired
-    private UserRepository userRepository;
+    UserRepository userRepository;
     @Autowired
-    private ItemRequestRepository itemRequestRepository;
+    ItemRequestRepository itemRequestRepository;
 
     private Item item;
     private User user1;
@@ -44,9 +44,9 @@ class ItemRepositoryTest {
 
     @AfterEach
     void afterEach() {
-        userRepository.deleteAll();
-        itemRepository.deleteAll();
         itemRequestRepository.deleteAll();
+        itemRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test
@@ -63,7 +63,7 @@ class ItemRepositoryTest {
     }
 
     @Test
-    void findAllByItemRequestId() {
+    void findAllByItemRequest_Id() {
         final List<Item> items = itemRepository.findAllByItemRequestId(itemRequest.getId());
         assertSame(user2, itemRequest.getRequestor());
         assertNotNull(items);

@@ -125,12 +125,12 @@
 											<limit>
 												<counter>LINE</counter>
 												<value>COVEREDRATIO</value>
-												<minimum>0.9</minimum>
+												<minimum>0.8</minimum>
 											</limit>
 											<limit>
 												<counter>BRANCH</counter>
 												<value>COVEREDRATIO</value>
-												<minimum>0.6</minimum>
+												<minimum>0.4</minimum>
 											</limit>
 											<limit>
 												<counter>COMPLEXITY</counter>
@@ -190,3 +190,4 @@
 		</profile>
 	</profiles>
 </project>
+

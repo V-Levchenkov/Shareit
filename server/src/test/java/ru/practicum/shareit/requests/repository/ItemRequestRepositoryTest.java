@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.requests.model.ItemRequest;
-import ru.practicum.shareit.requests.repository.ItemRequestRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
@@ -22,11 +21,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class ItemRequestRepositoryTest {
 
     @Autowired
-    private ItemRepository itemRepository;
+    ItemRepository itemRepository;
     @Autowired
-    private UserRepository userRepository;
+    UserRepository userRepository;
     @Autowired
-    private ItemRequestRepository itemRequestRepository;
+    ItemRequestRepository itemRequestRepository;
 
     private User user2;
     private ItemRequest itemRequest;
@@ -40,13 +39,13 @@ class ItemRequestRepositoryTest {
 
     @AfterEach
     void afterEach() {
+        itemRequestRepository.deleteAll();
         userRepository.deleteAll();
         itemRepository.deleteAll();
-        itemRequestRepository.deleteAll();
     }
 
     @Test
-    void findAllByRequestorIdOrderByCreatedDesc() {
+    void findAllByRequestor_IdOrderByCreatedDesc() {
         final List<ItemRequest> requests = itemRequestRepository
                 .findAllByRequestorIdOrderByCreatedDesc(itemRequest.getRequestor().getId());
         assertSame(user2, itemRequest.getRequestor());
@@ -56,7 +55,7 @@ class ItemRequestRepositoryTest {
     }
 
     @Test
-    void findAllRequestsTest() {
+    void findAll() {
         final Page<ItemRequest> pageRequests = itemRequestRepository
                 .findAll(Pageable.unpaged());
         List<ItemRequest> requests = pageRequests.getContent();

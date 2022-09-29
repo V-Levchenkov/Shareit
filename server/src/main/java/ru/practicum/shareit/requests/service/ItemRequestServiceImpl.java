@@ -77,5 +77,9 @@ public class ItemRequestServiceImpl implements ItemRequestService {
                 .map(mapper::toItemRequestDtoWithItems)
                 .collect(Collectors.toList());
     }
+    @Override
+    public void deleteById(long itemRequestId) {
+        itemRequestRepository.deleteById(itemRequestId);
+    }
 
 }

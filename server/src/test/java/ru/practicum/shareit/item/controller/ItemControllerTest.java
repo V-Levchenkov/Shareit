@@ -84,7 +84,7 @@ class ItemControllerTest {
     void createItemTest() throws Exception {
         Item item = createItem();
         ItemDto itemDto = itemMapper.toItemDto(item);
-        when(itemService.save(itemDto, item.getOwner().getId())).thenReturn(itemDto);
+        when(itemService.save(item.getOwner().getId(), itemDto)).thenReturn(itemDto);
         mockMvc.perform(post("/items").content(mapper.writeValueAsString(itemDto))
                         .header("X-Sharer-User-Id", item.getOwner().getId())
                         .characterEncoding(StandardCharsets.UTF_8)
@@ -93,7 +93,7 @@ class ItemControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\"id\": 1,\"name\": \"item1\"," +
                         " \"description\": \"description1\", \"available\": true, \"requestId\": 1}"));
-        verify(itemService, times(1)).save(itemDto, item.getOwner().getId());
+        verify(itemService, times(1)).save(item.getOwner().getId(), itemDto);
     }
 
     @Test
@@ -103,8 +103,8 @@ class ItemControllerTest {
         Item item2 = createItem();
         ItemDto itemDto2 = itemMapper.toItemDto(item2);
         itemDto2.setName("item2");
-        itemService.save(itemDto, item.getOwner().getId());
-        when(itemService.update(itemDto2, item.getOwner().getId(), itemDto.getId())).thenReturn(itemDto2);
+        itemService.save(item.getOwner().getId(), itemDto);
+        when(itemService.update(item.getOwner().getId(), itemDto.getId(),itemDto2)).thenReturn(itemDto2);
         mockMvc.perform(patch("/items/1")
                         .header("X-Sharer-User-Id", item.getOwner().getId())
                         .content(mapper.writeValueAsString(itemDto2))
@@ -115,7 +115,7 @@ class ItemControllerTest {
                 .andExpect(content().json("{\"id\": 1,\"name\": \"item2\"," +
                         " \"description\": \"description1\", \"available\": true, \"requestId\": 1}"));
         verify(itemService, times(1))
-                .update(itemDto2, item.getOwner().getId(), itemDto.getId());
+                .update(item.getOwner().getId(), itemDto.getId(), itemDto2);
     }
 
     @Test

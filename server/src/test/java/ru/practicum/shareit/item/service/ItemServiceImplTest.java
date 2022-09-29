@@ -107,7 +107,7 @@ class ItemServiceImplTest {
                 .thenReturn(Optional.of(item.getOwner()));
         when(itemRequestRepository.findById(item.getItemRequest().getId()))
                 .thenReturn(Optional.of(item.getItemRequest()));
-        ItemDto itemDto = itemService.save(itemMapper.toItemDto(item), item.getOwner().getId());
+        ItemDto itemDto = itemService.save(item.getOwner().getId(), itemMapper.toItemDto(item));
         assertNotNull(itemDto);
         assertEquals("item1", itemDto.getName());
         assertEquals("description1", itemDto.getDescription());
@@ -186,8 +186,7 @@ class ItemServiceImplTest {
         when(itemRepository.save(any(Item.class))).thenReturn(item2);
         when(itemRepository.findById(itemId))
                 .thenReturn(Optional.of(item));
-        ItemDto itemDto = itemService.update(itemMapper.toItemDto(item2),
-                item.getOwner().getId(), itemId);
+        ItemDto itemDto = itemService.update(item.getOwner().getId(), itemId, itemMapper.toItemDto(item2));
         assertNotNull(itemDto);
         assertEquals("item2", itemDto.getName());
         assertEquals("description1", itemDto.getDescription());

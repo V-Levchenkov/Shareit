@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingMapper;
+import ru.practicum.shareit.booking.enums.Status;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exception.BookingException;
@@ -23,7 +24,8 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static ru.practicum.shareit.booking.bookingTestUtils.TestUtils.toBookingDtoSimple;
-import static ru.practicum.shareit.booking.enums.Status.*;
+import static ru.practicum.shareit.booking.enums.Status.REJECTED;
+import static ru.practicum.shareit.booking.enums.Status.WAITING;
 
 class BookingServiceImplTest {
 
@@ -53,7 +55,7 @@ class BookingServiceImplTest {
         LocalDateTime start = LocalDateTime.parse("2022-09-10T10:42");
         LocalDateTime end = LocalDateTime.parse("2022-09-12T10:42");
         booking = new Booking(1L, start,
-                end, item, booker, APPROVED);
+                end, item, booker, Status.APPROVED);
         return booking;
     }
 

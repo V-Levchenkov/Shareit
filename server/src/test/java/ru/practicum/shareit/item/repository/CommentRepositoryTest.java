@@ -19,11 +19,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class CommentRepositoryTest {
 
     @Autowired
-    private ItemRepository itemRepository;
+    ItemRepository itemRepository;
     @Autowired
-    private UserRepository userRepository;
+    UserRepository userRepository;
     @Autowired
-    private CommentRepository commentRepository;
+    CommentRepository commentRepository;
 
     private Item item;
     private User user;
@@ -39,13 +39,13 @@ class CommentRepositoryTest {
 
     @AfterEach
     void afterEach() {
-        userRepository.deleteAll();
-        itemRepository.deleteAll();
         commentRepository.deleteAll();
+        itemRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test
-    void findAllCommentByItemIdTest() {
+    void findAllByItem_Id() {
         final List<Comment> comments = commentRepository.findAllByItemId(item.getId());
         assertNotNull(comments);
         assertEquals(1, comments.size());

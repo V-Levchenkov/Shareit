@@ -19,11 +19,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class CommentRepositoryTest {
 
     @Autowired
-    ItemRepository itemRepository;
+    private ItemRepository itemRepository;
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
-    CommentRepository commentRepository;
+    private CommentRepository commentRepository;
 
     private Item item;
     private User user;

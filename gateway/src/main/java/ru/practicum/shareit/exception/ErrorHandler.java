@@ -13,7 +13,7 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handle(IllegalArgumentException e) {
-        log.error("Unknown state: UNSUPPORTED_STATUS" + "\n" + e.getMessage());
+        log.error("Unknown state: UNSUPPORTED_STATUS" + "\n" + "{}", e.getMessage());
         return new ErrorResponse("Unknown state: UNSUPPORTED_STATUS", e.getMessage());
     }
 

@@ -21,11 +21,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class ItemRequestRepositoryTest {
 
     @Autowired
-    ItemRepository itemRepository;
+    private ItemRepository itemRepository;
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
-    ItemRequestRepository itemRequestRepository;
+    private ItemRequestRepository itemRequestRepository;
 
     private User user2;
     private ItemRequest itemRequest;

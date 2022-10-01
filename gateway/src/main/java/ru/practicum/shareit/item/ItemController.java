@@ -32,7 +32,7 @@ public class ItemController {
     @PostMapping
     public ResponseEntity<Object> create(@RequestHeader("X-Sharer-User-Id") long userId,
                                          @Valid @RequestBody ItemDto itemDto) {
-        log.info("Получен запрос к эндпоинту: '{} {}', Вещь: Наименование: {} и Описание: {}", "POST", "/items",
+        log.info("Получен запрос к эндпоинту: 'POST /items', Вещь: Наименование: {} и Описание: {}",
                 itemDto.getName(), itemDto.getDescription());
         return itemClient.save(userId, itemDto);
     }

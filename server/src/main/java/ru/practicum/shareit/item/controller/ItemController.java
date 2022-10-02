@@ -32,7 +32,7 @@ public class ItemController {
 
     @PostMapping
     public ItemDto create(@RequestHeader("X-Sharer-User-Id") long userId, @RequestBody ItemDto itemDto) {
-        log.info("Получен запрос к эндпоинту: '{} {}', Вещь: Наименование: {} и Описание: {}", "POST", "/items",
+        log.info("Получен запрос к эндпоинту: 'POST/items', Вещь: Наименование: {} и Описание: {}",
                 itemDto.getName(), itemDto.getDescription());
         return itemService.save(userId, itemDto);
     }
@@ -49,8 +49,7 @@ public class ItemController {
     public CommentDto createComment(@RequestHeader("X-Sharer-User-Id") long userId,
                                     @RequestBody CommentDto commentDto,
                                     @PathVariable long itemId) {
-        log.info("Получен запрос к эндпоинту: '{} {}', Вещь с Id: {}, Комментарий: {}",
-                "POST", "/items/{itemId}/comment",
+        log.info("Получен запрос к эндпоинту: 'POST/items/{itemId}/comment', Вещь с Id: {}, Комментарий: {}",
                 itemId, commentDto.getText());
         return itemService.saveComment(userId, itemId, commentDto);
     }

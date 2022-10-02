@@ -27,7 +27,7 @@ public class UserController {
 
     @PostMapping
     public UserDto create(@RequestBody UserDto userDto) {
-        log.info("Получен запрос к эндпоинту: '{} {}', Пользователь: Имя: {} и Email: {}", "POST", "/users",
+        log.info("Получен запрос к эндпоинту: 'POST/users', Пользователь: Имя: {} и Email: {}",
                 userDto.getName(), userDto.getEmail());
         return userService.save(userDto);
     }

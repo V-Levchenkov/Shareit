@@ -49,8 +49,7 @@ public class ItemController {
     public ResponseEntity<Object> createComment(@RequestHeader("X-Sharer-User-Id") long userId,
                                                 @Valid @RequestBody CommentDto commentDto,
                                                 @PathVariable long itemId) {
-        log.info("Получен запрос к эндпоинту: '{} {}', Вещь с Id: {}, Комментарий: {}",
-                "POST", "/items/{itemId}/comment",
+        log.info("Получен запрос к эндпоинту: 'POST/{itemId}/comment', Вещь с Id: {}, Комментарий: {}",
                 itemId, commentDto.getText());
         return itemClient.saveComment(userId, itemId, commentDto);
     }

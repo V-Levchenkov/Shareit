@@ -24,8 +24,7 @@ public class ItemRequestController {
     @PostMapping
     public ItemRequestDto add(@RequestHeader("X-Sharer-User-Id") long userId,
                               @RequestBody ItemRequestDto itemRequestDto) {
-        log.info("Получен запрос к эндпоинту: '{} {}', Запрос на вещь: Описание: {}",
-                "POST", "/requests",
+        log.info("Получен запрос к эндпоинту: 'POST/requests', Запрос на вещь: Описание: {}",
                 itemRequestDto.getDescription());
         return service.save(itemRequestDto, userId);
     }

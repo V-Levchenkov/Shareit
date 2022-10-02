@@ -22,24 +22,33 @@ public class BookingController {
     }
 
     @GetMapping
-    public List<BookingDto> findAll(@RequestHeader("X-Sharer-User-Id") long userId, @RequestParam(defaultValue = "ALL") String state, @RequestParam(defaultValue = "0") int from, @RequestParam(defaultValue = "20") int size) {
+    public List<BookingDto> findAll(@RequestHeader("X-Sharer-User-Id") long userId,
+                                    @RequestParam(defaultValue = "ALL") String state,
+                                    @RequestParam(defaultValue = "0") int from,
+                                    @RequestParam(defaultValue = "20") int size) {
         return bookingService.findAll(userId, state, from, size);
     }
 
     @GetMapping("/owner")
-    public List<BookingDto> findAllByOwner(@RequestHeader("X-Sharer-User-Id") long userId, @RequestParam(defaultValue = "ALL") String state, @RequestParam(defaultValue = "0") int from, @RequestParam(defaultValue = "20") int size) {
+    public List<BookingDto> findAllByOwner(@RequestHeader("X-Sharer-User-Id") long userId,
+                                           @RequestParam(defaultValue = "ALL") String state,
+                                           @RequestParam(defaultValue = "0") int from,
+                                           @RequestParam(defaultValue = "20") int size) {
         return bookingService.findAllByItemOwnerId(userId, state, from, size);
     }
 
     @PostMapping
-    public BookingDto create(@RequestBody BookingDtoSimple bookingDtoSimple, @RequestHeader("X-Sharer-User-Id") long userId) {
-        log.info("Получен запрос к эндпоинту: '{} {}', Бронирование: ItemId: {}", "POST", "/bookings", bookingDtoSimple.getItemId());
+    public BookingDto create(@RequestBody BookingDtoSimple bookingDtoSimple,
+                             @RequestHeader("X-Sharer-User-Id") long userId) {
+        log.info("Получен запрос к эндпоинту: 'POST/bookings', Бронирование: ItemId: {}", bookingDtoSimple.getItemId());
         return bookingService.save(bookingDtoSimple, userId);
     }
 
     @PatchMapping("/{bookingId}")
-    public BookingDto approve(@RequestHeader("X-Sharer-User-Id") long userId, @PathVariable long bookingId, @RequestParam Boolean approved) {
-        log.info("Получен запрос к эндпоинту: '{} {}', Подтверждение бронирование: ID: {}", "PATCH", "/bookings", bookingId);
+    public BookingDto approve(@RequestHeader("X-Sharer-User-Id") long userId,
+                              @PathVariable long bookingId,
+                              @RequestParam Boolean approved) {
+        log.info("Получен запрос к эндпоинту: 'PATCH/bookings', Подтверждение бронирование: ID: {}", bookingId);
         return bookingService.approve(userId, bookingId, approved);
     }
 
